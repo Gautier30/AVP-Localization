@@ -27,17 +27,22 @@ This code uses the RSSI of various WIFI routers in the surrounding area to appro
 
 We decided to start from this code and make modifications. We adapted the code to suit our application.
 
-this is what the interface of the original code looks like :
+This is what the interface of the original code looks like :
 
 ![First version Interface](Pictures/app_interface1.png)
 
-The image represent the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
+The image represents the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
 We estimates the inaccuracy to be from 2 to 5 meters from our real position.
 
+This first test is localizing our computer hosting the app. However, we want everything to run on the Donkey Car. So we went ahead and installed the full repository on the Raspberry Pi, but unfortunately, the package *Pyside6* which is responsible for the GUI and map of the Delta building cannot be installed on the single board computer (We thought we'd access the GUI running on the car via SSH with an -X argument). A workaround we came up with is installing an MQTT broker on the Pi, and sending the car's position as MQTT messages which a distant computer can grasp and place on the map. This way, the car can determine its position with respect to the routers, use it to navigate, and on our computer we're able to track the said position on the map. While we were at it, we also installed Node-RED on the Pi to take advantage of the MQTT receiver tool and debugging console.
 
-[HERE GAUTIER Explain the server method]
+The schematic below breaks down this process in case this explanation was not clear enough:
 
-[![First video of the car localization send on server and display on computer](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)](https://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
+![MQTT server schematic](Pictures/mqttserver.png)
 
 
-With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
+
+![First video of the car localization send on server and display on computer](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)(https://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
+
+
+With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
