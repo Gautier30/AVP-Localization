@@ -29,7 +29,7 @@ We decided to start from this code and make modifications. We adapted the code t
 
 This is what the interface of the original code looks like :
 
-<img src="Pictures/app_interface1.png" width="500">
+<img src="Pictures/app_interface1.png" width="900">
 
 The image represents the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
 We estimates the inaccuracy to be from 2 to 5 meters from our real position.
@@ -43,7 +43,7 @@ The schematic below breaks down this process in case this explanation was not cl
 
 Here is a video of us trying to locate the car on the computer, while we drive it manually:
 
-[<img src="https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg" width="500">](https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg)](https://www.youtube.com/watch?v=ZmvoQWlBWLI)
+[<img src="https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg" width="500">](https://www.youtube.com/watch?v=ZmvoQWlBWLI)
 
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
