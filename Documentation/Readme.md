@@ -42,7 +42,7 @@ The schematic below breaks down this process in case this explanation was not cl
 
 
 
-[![First video of the car localization send on server and display on computer](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)](https://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
+[![First video of the car localization send on server and display on computer](https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg)](https://www.youtube.com/watch?v=ZmvoQWlBWLI)
 
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
