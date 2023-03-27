@@ -1,6 +1,16 @@
 # Blog
 Here is the full blog of this project where we display our research and experiments.
 
+## The Donkey Car
+
+![Donkey Car](Pictures/donkeycar.jpg)
+
+Donkey Car is an open source, DIY self-driving platform. It focuses on providing enthusiasts and students with all the tools to experiment with deep learning, object detection and autonomous driving. Thanks to libraries like TensorFlow, Keras, OpenCV, users can train their own self driving model, based on imitation learning for instance, and within hours they can obtain a working autonomous vehicle, capable of taking corners and avoiding obstacles.
+
+The Donkey Car can be bought as a full kit, or assembled by the user with 3D printed parts and some electronics like the Raspberry Pi 4, Robot Hat MM1, servos...
+
+The full project is accessible and very well documented online.
+
 ## Setting up the car
 
 For this project, we are working with the Donkey Car number 124. The car was used previously by other students, but we decided to flash a brand new image on the SD Card just to be sure we can start from scratch and tailor our environment for our project.
