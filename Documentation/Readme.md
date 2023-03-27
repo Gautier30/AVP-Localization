@@ -3,7 +3,7 @@ Here is the full blog of this project where we display our research and experime
 
 ## The Donkey Car
 
-<img src="Pictures/donkeycar.jpg" width="250">
+<img src="Pictures/donkeycar.jpg" width="500">
 
 Donkey Car is an open source, DIY self-driving platform. It focuses on providing enthusiasts and students with all the tools to experiment with deep learning, object detection and autonomous driving. Thanks to libraries like TensorFlow, Keras, OpenCV, users can train their own self driving model, based on imitation learning for instance, and within hours they can obtain a working autonomous vehicle, capable of taking corners and avoiding obstacles.
 
@@ -29,7 +29,7 @@ We decided to start from this code and make modifications. We adapted the code t
 
 This is what the interface of the original code looks like :
 
-![First version Interface](Pictures/app_interface1.png)
+<img src="Pictures/app_interface1.png" width="500">
 
 The image represents the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
 We estimates the inaccuracy to be from 2 to 5 meters from our real position.
@@ -38,11 +38,12 @@ This first test is localizing our computer hosting the app. However, we want eve
 
 The schematic below breaks down this process in case this explanation was not clear enough:
 
-![MQTT server schematic](Pictures/mqttserver.png)
+<img src="Pictures/mqttserver.png" width="500">
 
 
+Here is a video of us trying to locate the car on the computer, while we drive it manually:
 
-[![First video of the car localization send on server and display on computer](https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg)](https://www.youtube.com/watch?v=ZmvoQWlBWLI)
+[<img src="https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg" width="500">](https://i3.ytimg.com/vi/ZmvoQWlBWLI/maxresdefault.jpg)](https://www.youtube.com/watch?v=ZmvoQWlBWLI)
 
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
