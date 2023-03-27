@@ -37,7 +37,7 @@ We estimates the inaccuracy to be from 2 to 5 meters from our real position.
 
 [HERE GAUTIER Explain the server method]
 
-
+[![First video of the car localization send on server and display on computer](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)](httpsYOUTUBE_VIDEO_ID_HERE://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
 ![First video of the car localization send on server and display on computer](https://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
 
 
