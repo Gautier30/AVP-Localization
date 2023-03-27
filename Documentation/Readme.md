@@ -20,6 +20,16 @@ This setup is rather straightforward since Donkey Car provides a very step by st
 
 A small hiccup during the setup of the Raspberry Pi was that we misunderstood the network setting template and left some "<>" in the SSID and password definitions. It took us some time to figure out the mistake and without a working connection between the Pi and the router, we were not able to SSH into the car and perform further setup.
 
+Our car being the number 124, we went with the hostname ```donkey-124```. So the car can be accessed through SSH like so:
+
+```
+ssh pi@donkey-124.local
+```
+
+Using a hostname makes things so much easier. On a small network, finding the IP associated with the car from the router's interface is doable, but on the university's network it's absolutely impossible. 
+
+**Note:** our car is locked with a password so no one can access it while it's running via SSH. This doesn't prevent anyone from altering our SD card physically when the car is stored in its box of course...
+
 ## Calibrating the car
 
 Once the car is setup and can be accessed via SSH, it can technically drive, but its direction must be calibrated to make sure it drives straight. To do so, there are two ways:
