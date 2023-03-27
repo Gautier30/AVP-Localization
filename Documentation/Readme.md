@@ -37,7 +37,7 @@ We estimates the inaccuracy to be from 2 to 5 meters from our real position.
 
 [HERE GAUTIER Explain the server method]
 
-[![First video of the car localization send on server and display on computer](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)](httpsYOUTUBE_VIDEO_ID_HERE://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
+[![First video of the car localization send on server and display on computer](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)](https://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
 
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
