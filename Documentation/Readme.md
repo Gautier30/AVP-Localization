@@ -23,7 +23,9 @@ A small hiccup during the setup of the Raspberry Pi was that we misunderstood th
 
 Indoor localization poses a significant challenge as conventional tools such as GPS are not reliable in buildings. As a result, our project turned to WIFI localization as a potential solution. We discovered a project developed by a bachelor's student from Tartu University that utilized WIFI signals for positioning. You can find the code on his GitHub repository: https://github.com/tonysln/delta-wifi-pos.
 
-This code uses the RSSI of various WIFI routers in the surrounding area to approximate the location of the device. We decided to start from this code and make modifications. We adapted the code to suit our application.
+This code uses the RSSI of various WIFI routers in the surrounding area to approximate the location of the device. For the interface, it uses Qt framework to show the interactive map with the user location.
+
+We decided to start from this code and make modifications. We adapted the code to suit our application.
 
 this is what the interface of the original code looks like :
 
@@ -31,3 +33,12 @@ this is what the interface of the original code looks like :
 
 The image represent the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
 We estimates the inaccuracy to be from 2 to 5 meters from our real position.
+
+
+[HERE GAUTIER Explain the server method]
+
+
+![First video of the car localization send on server and display on computer](https://www.youtube.com/watch?v=https://youtu.be/ZmvoQWlBWLI)
+
+
+With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
