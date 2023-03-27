@@ -24,22 +24,21 @@ A small hiccup during the setup of the Raspberry Pi was that we misunderstood th
 
 Once the car is setup and can be accessed via SSH, it can technically drive, but its direction must be calibrated to make sure it drives straight. To do so, there are two ways:
 
-    1. Using the command line, playing with different PWM values until we found one that's satisfying.
+1. Using the command line, playing with different PWM values until we found one that's satisfying.
 
-    This method did not work for us, as it is complicated to understand which GPIO pin is used by the board to steer, and how to call it in the command.
+This method did not work for us, as it is complicated to understand which GPIO pin is used by the board to steer, and how to call it in the command.
 
-    2. Using the mobile app and installing all the necessary server software on the car.
+2. Using the mobile app and installing all the necessary server software on the car.
 
-    This method worked so easily for us we almost regretted wasting time on the first method. The Donkey Car documentation breaks down the steps on how to setup the mobile app (client) and software (server) on the car.
+This method worked so easily for us we almost regretted wasting time on the first method. The Donkey Car documentation breaks down the steps on how to setup the mobile app (client) and software (server) on the car.
 
-    http://docs.donkeycar.com/guide/deep_learning/mobile_app/
+http://docs.donkeycar.com/guide/deep_learning/mobile_app/
 
 For the mobile app to detect the car (obviously connected on the same WiFi network), the server must be running on the car. To do so, here are some commands to be executed in the car via SSH:
 
 ```
 cd /opt/donkeycar-console
 python manage.py runserver 0.0.0.0:8000
-
 ```
 
 From the app it's important to calibrate the steering but **ALSO** the throttle. We had a bad surprise and the car zoomed across the room breaking the camera mount. The car should lifted off the ground and the throttle PWM should be calibrated (reduced/increased) so that the car's wheels spin at a reasonable speed when the speed multiplier set by the controller is high.
@@ -51,7 +50,6 @@ When the car is calibrated, we can actually start driving. Again, the Donkey Car
 ```
 cd ~/mycar
 python manage.py drive --js
-
 ```
 
 Note that the ``` --js ``` argument specifies that we want to drive with the controller that's chosen in the myconfig.py file! In our case we use the Logitech F710.
