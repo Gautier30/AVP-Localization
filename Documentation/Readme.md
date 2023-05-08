@@ -121,7 +121,7 @@ We mounted the MPU6050 at the front of the Donkey Car, and the sensor itself is 
 
 **Note:** Since we do not use a magnetometer, which in essence can tell the North orientation. We added some calibration step in the IMU start up code to calibrate the orientation with an external compass (on a mobile app for instance). The car needs to be placed on a flat surface, oriented with its front facing the North and the Reset button on the D1 mini should be pressed once. The calibration takes roughly 30 seconds.
 
-# high level command (hlc)
+# High Level Command (hlc)
 
 ## Manual hlc
 To set up the model that takes high-level commands as inputs, we typically just need to set **TRAIN_BEHAVIOR** to **True** in the Donkey Car configuration file ```myconfig.py```. However, this approach did not work for us since the high-level commands were not being included in the model inputs when we attempted to train it. In order to resolve this issue, we needed to modify the code. Specifically, we modified the controller code to include the high-level state when the drive was launched. This allowed us to add the high-level command as an input for the model during training. Additionally, while making these changes, we also modified the controller code to enable us to manually change the high-level command using the dpad on the controller.
@@ -156,4 +156,17 @@ Once we could train the model, the next challenge was to make it perform well. T
 
 
 
-# Hardware troubles
+# Hardware issues
+
+The Donkey Cars are cool little cars to learn Deep Learning... When they don't fail miserably.
+
+During the project we unfortunately had issues with our car, the number 124. At first it had a really bad steering angle but we managed to tune it a little bit by setting up the steering mechanism: the axles can be extended or shortened by screwing them in or out. This pushes the wheel inward or outward and can correct a bad parallelism. Also, the software calibration presented at the beginning of the blog helped compensate some drift but the car was actually never able to make sharp turns.
+
+At some point we tried to SSH into the car and it just stopped working overnight. We thought the OS was corrupted at first. If the battery is too low and the car shuts down while it's processing, it could ruin the file system and make the car unbootable. That's why the command below should always be used before unplugging the battery or PSU. 
+```
+sudo poweroff
+``` 
+
+Unfortunately, a fresh install on the SD card didn't solve the problem. We tried different SD cards, several Raspberry Pis, we also tried to plug the HDMI port to a monitor to see if we could play with the terminal but there was no signal. This was very problematic since we couldn't do anything with the car and make any progress. 
+
+We simply got a brand new car, the number 260. This one had a really good steering angle and we could make much sharper and more usable turns. After wasting precious hours we could finally go back to work.
