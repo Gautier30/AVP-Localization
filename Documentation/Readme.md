@@ -1,7 +1,8 @@
-# Blog
+**Blog**
+====
 Here is the full blog of this project where we display our research and experiments.
 
-## The Donkey Car
+# The Donkey Car
 <p align="center">
 <img src="Pictures/donkeycar.jpg" width="500">
 </p>
@@ -12,7 +13,7 @@ The Donkey Car can be bought as a full kit, or assembled by the user with 3D pri
 
 The full project is accessible and very well documented online.
 
-## Setting up the car
+# Setting up the car
 
 For this project, we started working with the Donkey Car number 124. The car was used previously by other students, but we decided to flash a brand new image on the SD Card just to be sure we can start from scratch and tailor our environment for our project.
 
@@ -32,7 +33,7 @@ Using a hostname makes things so much easier. On a small network, finding the IP
 
 **Note:** our car is locked with a password so no one can access it while it's running via SSH. This doesn't prevent anyone from altering our SD card physically when the car is stored in its box of course...
 
-## Calibrating the car
+# Calibrating the car
 
 Once the car is setup and can be accessed via SSH, it can technically drive, but its direction must be calibrated to make sure it drives straight. To do so, there are two ways:
 
@@ -55,7 +56,7 @@ python manage.py runserver 0.0.0.0:8000
 
 From the app it's important to calibrate the steering but **ALSO** the throttle. We had a bad surprise and the car zoomed across the room breaking the camera mount. The car should lifted off the ground and the throttle PWM should be calibrated (reduced/increased) so that the car's wheels spin at a reasonable speed when the speed multiplier set by the controller is high.
 
-## Driving the car
+# Driving the car
 
 When the car is calibrated, we can actually start driving. Again, the Donkey Car documentation makes it really straight forward. Here are some commands to start driving the car:
 
@@ -68,7 +69,7 @@ Note that the ``` --js ``` argument specifies that we want to drive with the con
 
 Pressing the **START** button until the terminal says "user" we set the car so that it expects thumbsticks input for throttle and steering. The car should move if the speed multiplier is set high enough with the D-pad's up and down buttons!
 
-## Indoor localization 
+# Indoor localization 
 
 Indoor localization poses a significant challenge as conventional tools such as GPS are not reliable in buildings. As a result, our project turned to WIFI localization as a potential solution. We discovered a project developed by a bachelor's student from Tartu University that utilized WIFI signals for positioning. You can find the code on his GitHub repository: https://github.com/tonysln/delta-wifi-pos.
 
@@ -100,7 +101,9 @@ https://www.youtube.com/watch?v=ZmvoQWlBWLI
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
 
-## IMU
+Ultimately, in order to achieve the desired results, we had to improve the scanning time of the network as the original method was too inconsistent. Our initial attempts involved scanning only wireless access points with a specific frequency, such as all those operating at 2.4GHz. By implementing this method, we were able to reduce the scanning time from #**insert time**#to #**insert time**#. Despite this improvement, we still faced issues with uncertainty.
+
+# IMU
 
 Having a way to localize the car at hand, we then needed to measure the car's heading so that we could implement some path planning from the vehicle's current location to a goal point (in other words we wanted the car to have its own compass). The MM1 Hat that is installed on the car has a MPU9250, an IMU (Inertial Measurement Unit) composed of a gyroscope, accelerometer and a complementary magnetometer. We tried to take advantage of this sensor using the very famous i2cdevlib module for Python developed by J. Rowberg (https://github.com/jrowberg/i2cdevlib) but the sensor is wired onto the board in a way that makes it difficult to use. Instead, we used our own MPU6050 IMU which is a downgraded version of the MPU9250 without the magnetometer.
 
@@ -118,11 +121,39 @@ We mounted the MPU6050 at the front of the Donkey Car, and the sensor itself is 
 
 **Note:** Since we do not use a magnetometer, which in essence can tell the North orientation. We added some calibration step in the IMU start up code to calibrate the orientation with an external compass (on a mobile app for instance). The car needs to be placed on a flat surface, oriented with its front facing the North and the Reset button on the D1 mini should be pressed once. The calibration takes roughly 30 seconds.
 
+# high level command (hlc)
 
-## Training a model
+## Manual hlc
+To set up the model that takes high-level commands as inputs, we typically just need to set **TRAIN_BEHAVIOR** to **True** in the Donkey Car configuration file ```myconfig.py```. However, this approach did not work for us since the high-level commands were not being included in the model inputs when we attempted to train it. In order to resolve this issue, we needed to modify the code. Specifically, we modified the controller code to include the high-level state when the drive was launched. This allowed us to add the high-level command as an input for the model during training. Additionally, while making these changes, we also modified the controller code to enable us to manually change the high-level command using the dpad on the controller.
 
-To train our model, we attempted to use the computer's GPU by following the instructions in the Donkey Car documentation. After numerous hours of installation, deletion, and reinstallation of different versions, we finally succeeded in getting the GPU to work. However, the training process was still problematic - it took a long time to start and would stop or crash after a few epochs. At first, we thought that it might be due to corrupted data. So, we tried different configurations, such as changing the resolution of the images, but we still couldn't get it to work. We also tried reducing the number of parameters of the model to lessen the GPU's load. Finally, what worked for us was setting IMAGE_H which is in the myconfig.py file to 128 and training the model on the CPU instead of the GPU. Initially, we had kept the default IMAGE_H value of 120, but a warning message indicated that it would be automatically adjusted to 128 because 120 was not feasible. To ensure that we had control over this variable, we manually defined IMAGE_H as 128.
+So finally to run the drive with the high level command we use :
+```
+python3 manage.py drive --js --type behavior
+```
+We added the ```--type behavior``` parameter to ensure that we wouldn't encounter any issues.
+
+## hlc from IMU
+
+blablabla
+
+# Training a model
+
+To train the model we need to run the following command:
+```
+donkey train --tub ./data/<tub name> --model ./models/<model name>
+```
+But this is only if we want to train a model without the high level command. If we want to add the high level command, we need to specify again ```--type behavior:```
+```
+donkey train --tub ./data/<tub name> --model ./models/<model name> --type behavior
+ ```
+
+```<tub name>```  is not necessary is you don't have the data directly in the data folder.
+
+To train our model, we attempted to use the computer's GPU by following the instructions in the Donkey Car documentation. After numerous hours of installation, deletion, and reinstallation of different versions, we finally succeeded in getting the GPU to work. However, the training process was still problematic - it took a long time to start and would stop or crash after a few epochs. At first, we thought that it might be due to corrupted data. So, we tried different configurations, such as changing the resolution of the images, but we still couldn't get it to work. We also tried reducing the number of parameters of the model to lessen the GPU's load. Finally, what worked for us was setting IMAGE_H which is in the ```myconfig.py``` file to 128 and training the model on the CPU instead of the GPU. Initially, we had kept the default IMAGE_H value of 120, but a warning message indicated that it would be automatically adjusted to 128 because 120 was not feasible. To ensure that we had control over this variable, we manually defined IMAGE_H as 128.
+
 
 Once we could train the model, the next challenge was to make it perform well. To achieve the desired results, we had to overfit the model to the specific use case. For example, if we wanted to train the model to drive the car straight until it reached an intersection, and then turn left or continue straight based on high-level commands, we had to use the exact same intersection for both training and testing. If we tested the same model on a different intersection, it would not work. This limitation was primarily due to the amount of training data we used. By increasing the quantity of data, we could potentially generalize the model to multiple intersections. However, our immediate goal was to test whether the high-level command would work with the model so that we could move forward and try the same approach with localization.
 
-## Hardware troubles
+
+
+# Hardware troubles
