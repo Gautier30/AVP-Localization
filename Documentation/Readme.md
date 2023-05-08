@@ -14,16 +14,18 @@ The full project is accessible and very well documented online.
 
 ## Setting up the car
 
-For this project, we are working with the Donkey Car number 124. The car was used previously by other students, but we decided to flash a brand new image on the SD Card just to be sure we can start from scratch and tailor our environment for our project.
+For this project, we started working with the Donkey Car number 124. The car was used previously by other students, but we decided to flash a brand new image on the SD Card just to be sure we can start from scratch and tailor our environment for our project.
+
+**However, the steering angle of the car was terrible and we ended up not being able to access the car at all (corrupted OS, broken hardware...?). For that reason we were given the car number 260 instead. This new car worked flawlessly for the rest of the project.**
 
 This setup is rather straightforward since Donkey Car provides a very step by step documentation on their website: http://docs.donkeycar.com
 
 A small hiccup during the setup of the Raspberry Pi was that we misunderstood the network setting template and left some "<>" in the SSID and password definitions. It took us some time to figure out the mistake and without a working connection between the Pi and the router, we were not able to SSH into the car and perform further setup.
 
-Our car being the number 124, we went with the hostname ```donkey-124```. So the car can be accessed through SSH like so:
+Our car being the number 260, we went with the hostname ```donkey-260```. So the car can be accessed through SSH like so:
 
 ```
-ssh pi@donkey-124.local
+ssh pi@donkey-260.local
 ```
 
 Using a hostname makes things so much easier. On a small network, finding the IP associated with the car from the router's interface is doable, but on the university's network it's absolutely impossible. 
@@ -97,3 +99,24 @@ https://www.youtube.com/watch?v=ZmvoQWlBWLI
 
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
+
+## IMU
+
+Having a way to localize the car at hand, we then needed to measure the car's heading so that we could implement some path planning from the vehicle's current location to a goal point (in other words we wanted the car to have its own compass). The MM1 Hat that is installed on the car has a MPU9250, an IMU (Inertial Measurement Unit) composed of a gyroscope, accelerometer and a complementary magnetometer. We tried to take advantage of this sensor using the very famous i2cdevlib module for Python developed by J. Rowberg (https://github.com/jrowberg/i2cdevlib) but the sensor is wired onto the board in a way that makes it difficult to use. Instead, we used our own MPU6050 IMU which is a downgraded version of the MPU9250 without the magnetometer.
+
+The issue with the lack of magnetometer is that we needed to implement a compass for the car, and using the accelerometer/gyroscope combo alone can only do the trick to some extent. Z-drift is very noticeable overtime but thankfully J.Rowberg thought about it and an interrupt pin on the MPU6050 coupled with a DMP (Digital Motion Processor) embedded on the sensor allows some digital filtering and the drift is significantly attenuated.
+
+<p align="center">
+<img src="Pictures/imu.jpg" width="500">
+</p>
+
+We mounted the MPU6050 at the front of the Donkey Car, and the sensor itself is connected to a Wemos D1 mini (ESP8266) micro-controller (MCU). The MCU reads the IMU and sends the Z rotation as Euler angle through Serial (USB). Then we have a python script that reads the Serial port on the Raspberry Pi and extracts the Z orientation. From there we can process the value and use it for navigation.
+
+<p align="center">
+<img src="Pictures/wemos.jpg" width="250">
+</p>
+
+**Note:** Since we do not use a magnetometer, which in essence can tell the North orientation. We added some calibration step in the IMU start up code to calibrate the orientation with an external compass (on a mobile app for instance). The car needs to be placed on a flat surface, oriented with its front facing the North and the Reset button on the D1 mini should be pressed once. The calibration takes roughly 30 seconds.
+
+
+## Hardware troubles
