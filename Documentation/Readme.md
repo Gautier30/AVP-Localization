@@ -89,11 +89,11 @@ This is what the interface of the original code looks like :
 </p>
 
 The image represents the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
-We estimates the inaccuracy to be from 2 to 5 meters from our real position.
+We estimate the inaccuracy to be from 2 to 5 meters from our real position.
 
 This first test is localizing our computer hosting the app. However, we want everything to run on the Donkey Car. So we went ahead and installed the full repository on the Raspberry Pi, but unfortunately, the package *Pyside6* which is responsible for the GUI and map of the Delta building cannot be installed on the single board computer (We thought we'd access the GUI running on the car via SSH with an -X argument). A workaround we came up with is installing an MQTT broker on the Pi, and sending the car's position as MQTT messages which a distant computer can grasp and place on the map. This way, the car can determine its position with respect to the routers, use it to navigate, and on our computer we're able to track the said position on the map. While we were at it, we also installed Node-RED on the Pi to take advantage of the MQTT receiver tool and debugging console.
 
-The schematic below breaks down this process in case this explanation was not clear enough:
+The schematic below breaks down this process:
 
 <p align="center">
 <img src="Pictures/mqttserver.png" width="500">
