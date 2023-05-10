@@ -108,6 +108,10 @@ With this method we can retrieve the car's location from the server and display 
 
 Ultimately, in order to achieve the desired results, we had to improve the scanning time of the network as the original method was too inconsistent. Our initial attempts involved scanning only wireless access points with a specific frequency, such as all those operating at 2.4GHz. By implementing this method, we were able to reduce the scanning time from arround 3.7 sec to 0.07 sec. Despite this improvement, we still faced issues with uncertainty.
 
+Here is a video demo of our sped up localization:
+
+https://youtu.be/D-p2JqKJJ3Y
+
 # IMU
 
 Having a way to localize the car at hand, we then needed to measure the car's heading so that we could implement some path planning from the vehicle's current location to a goal point (in other words we wanted the car to have its own compass). The MM1 Hat that is installed on the car has a MPU9250, an IMU (Inertial Measurement Unit) composed of a gyroscope, accelerometer and a complementary magnetometer. We tried to take advantage of this sensor using the very famous i2cdevlib module for Python developed by J. Rowberg (https://github.com/jrowberg/i2cdevlib) but the sensor is wired onto the board in a way that makes it difficult to use. Instead, we used our own MPU6050 IMU which is a downgraded version of the MPU9250 without the magnetometer.
@@ -218,3 +222,26 @@ Unfortunately, a fresh install on the SD card didn't solve the problem. We tried
 
 We simply got a brand new car, the number 260. This one had a really good steering angle and we could make much sharper and more usable turns. After wasting precious hours we could finally go back to work.
 
+# Next steps
+
+At the stage were we have to submit this blog (10/05/2023) the project is technically not complete. The car is not able to navigate autonomously yet, but we still managed to develop the building blocks of what could be the final solution:
+
+- **Localization:** improving the work of Anton Slavin on WiFi router localization, we have a way to localize more or less precisely the car in a straight line (ideally Delta's 2 floor for now). The refresh rate is okay for a moving vehicle but the accuracy of localization could be improved further (better calculations, filtering routers...).
+
+- **IMU:** we have our "compass" working. The MPU6050 works enough for now although we need to manually set the North everytime. We could improve this part using the MPU9250 that's on the car. The Donkey Car community could help, or the sensor would be rather easy to source and install the way we did with our own IMU.
+
+- **High level commands:** the high level commands work with a very simple model trained on very few data. We could start training a more serious model driving around the entire building. That way we could hopefully generalize on more intersections that the one next to the IoT Lab. The commands are easy to generate both manually and with our compass.
+
+# Conclusion
+
+We showed with this project that it is feasible to localize the Donkey Car more or less precisely to allow free range driving in the entire Delta building without using traditional solutions like LiDars. We also managed to implement high level commands to dictate some action based on a compass, which the car obeys only if the environment allows it.
+
+Unfortunately, we wasted quite a lot of precious time on hardware debugging. Thus, we do not have a working autonomous car at the end date of this project. It is quite frustrating but we still managed to come up with all the "parts" we would need to push this work forward and eventually complete it.
+
+About the learning outcomes of this project, it was a great opportunity for us to dive deep into some complex code architecture and inject our bits here and there, with sometimes some very limited documentation from the Donkey Car community. We also learned that even if the scope of this project was mostly software based, when the hardware doesn't want to cooperate, the entire project is stalled.
+
+# Acknowledgement
+
+We would like to thank Anton Slavin for his work on WiFi localization and his tips on how to make his app work on our machine.
+
+We would also like to thank Naveed Muhammad and Ardi Tampuu for their trust and guidance trhoughout this whole project.
