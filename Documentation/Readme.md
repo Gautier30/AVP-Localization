@@ -165,6 +165,10 @@ We added the ```--type behavior``` parameter to ensure that we wouldn't encounte
 ## Manual HLC
 To set up the model that takes high-level commands as inputs, we typically just need to set **TRAIN_BEHAVIOR** to **True** in the Donkey Car configuration file ```myconfig.py```. However, this approach did not work for us since the high-level commands were not being included in the model inputs when we attempted to train it. In order to resolve this issue, we needed to modify the code. Specifically, we modified the controller code to include the high-level state when the drive was launched. This allowed us to add the high-level command as an input for the model during training. Additionally, while making these changes, we also modified the controller code to enable us to manually change the high-level command using the dpad on the controller.
 
+Here is a demo video of manual HLC:
+
+https://youtu.be/aO8aMNdHT0k
+
 
 ## IMU HLC
 The aim was to create a high-level command based on IMU data and basic logic. For instance, we manually set a target angle of 90 degrees to the right, which generated an HLC of RIGHT until the IMU detected that we had completed the 90-degree turn, at which point it generated a CENTER HLC. To test this, we added a button to the controller that would prioritize either the IMU-generated HLC or the manual HLC from the dpad. Furthermore, we were able to replace the dpad's manual command sending function with a function that sends the target angle to the IMU code, allowing the IMU to generate the appropriate HLC. This simulation was necessary to prepare for the scenario where another code (like localization) would provide target angles to the IMU code.
@@ -186,6 +190,10 @@ donkey train --tub ./data/<tub name> --model ./models/<model name> --type behavi
 ```<tub name>```  is not necessary is you don't have the data directly in the data folder.
 
 Initially, we aimed to train a linear model to enable autonomous driving of the car along the circuit. We gathered data from multiple laps and attempted to train the model. However, the training process took much longer than anticipated due to several issues, which we will discuss below.
+
+Here is a video demo of our Donkey Car doing laps autonomously:
+
+https://youtu.be/tWAjIFH8FDw
 
 
 To train our model, we attempted to use the computer's GPU by following the instructions in the Donkey Car documentation. After numerous hours of installation, deletion, and reinstallation of different versions, we finally succeeded in getting the GPU to work. However, the training process was still problematic - it took a long time to start and would stop or crash after a few epochs. At first, we thought that it might be due to corrupted data. So, we tried different configurations, such as changing the resolution of the images, but we still couldn't get it to work. We also tried reducing the number of parameters of the model to lessen the GPU's load. Finally, what worked for us was setting IMAGE_H which is in the ```myconfig.py``` file to 128 and training the model on the CPU instead of the GPU. Initially, we had kept the default IMAGE_H value of 120, but a warning message indicated that it would be automatically adjusted to 128 because 120 was not feasible. To ensure that we had control over this variable, we manually defined IMAGE_H as 128.
