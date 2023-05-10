@@ -121,20 +121,24 @@ We mounted the MPU6050 at the front of the Donkey Car, and the sensor itself is 
 
 **Note:** Since we do not use a magnetometer, which in essence can tell the North orientation. We added some calibration step in the IMU start up code to calibrate the orientation with an external compass (on a mobile app for instance). The car needs to be placed on a flat surface, oriented with its front facing the North and the Reset button on the D1 mini should be pressed once. The calibration takes roughly 30 seconds.
 
-# High Level Command (hlc)
+# High Level Command (HLC)
 
-## Manual hlc
-To set up the model that takes high-level commands as inputs, we typically just need to set **TRAIN_BEHAVIOR** to **True** in the Donkey Car configuration file ```myconfig.py```. However, this approach did not work for us since the high-level commands were not being included in the model inputs when we attempted to train it. In order to resolve this issue, we needed to modify the code. Specifically, we modified the controller code to include the high-level state when the drive was launched. This allowed us to add the high-level command as an input for the model during training. Additionally, while making these changes, we also modified the controller code to enable us to manually change the high-level command using the dpad on the controller.
+Our objective was to use the high-level command to gather information about whether the car should turn RIGHT, LEFT, or continue CENTER. For instance, when approaching an intersection, the car would rely on the HLC to determine whether to turn or continue straight while also avoiding obstacles.
 
-So finally to run the drive with the high level command we use :
+To run the drive with the high level command we use :
 ```
 python3 manage.py drive --js --type behavior
 ```
 We added the ```--type behavior``` parameter to ensure that we wouldn't encounter any issues.
 
-## hlc from IMU
 
-blablabla
+## Manual HLC
+To set up the model that takes high-level commands as inputs, we typically just need to set **TRAIN_BEHAVIOR** to **True** in the Donkey Car configuration file ```myconfig.py```. However, this approach did not work for us since the high-level commands were not being included in the model inputs when we attempted to train it. In order to resolve this issue, we needed to modify the code. Specifically, we modified the controller code to include the high-level state when the drive was launched. This allowed us to add the high-level command as an input for the model during training. Additionally, while making these changes, we also modified the controller code to enable us to manually change the high-level command using the dpad on the controller.
+
+
+## IMU HLC
+The aim was to create a high-level command based on IMU data and basic logic. For instance, we manually set a target angle of 90 degrees to the right, which generated an HLC of RIGHT until the IMU detected that we had completed the 90-degree turn, at which point it generated a CENTER HLC. To test this, we added a button to the controller that would prioritize either the IMU-generated HLC or the manual HLC from the dpad. Furthermore, we were able to replace the dpad's manual command sending function with a function that sends the target angle to the IMU code, allowing the IMU to generate the appropriate HLC. This simulation was necessary to prepare for the scenario where another code (like localization) would provide target angles to the IMU code.
+
 
 # Training a model
 
