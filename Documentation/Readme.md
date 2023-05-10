@@ -121,6 +121,31 @@ We mounted the MPU6050 at the front of the Donkey Car, and the sensor itself is 
 
 **Note:** Since we do not use a magnetometer, which in essence can tell the North orientation. We added some calibration step in the IMU start up code to calibrate the orientation with an external compass (on a mobile app for instance). The car needs to be placed on a flat surface, oriented with its front facing the North and the Reset button on the D1 mini should be pressed once. The calibration takes roughly 30 seconds.
 
+## Serial communication difficulties
+Another difficulty we encountered was related to the serial communication between the ESP8266 and the Python script. The MCU streams the angles continuously and we would struggle "syncing" the serial read from the Python script with the serial write from the board. Thankfully, Raspberry Pi's official website contains a guide on how to read serial through USB and gives some arguments to pass when declaring a ```serialPort``` object.
+
+```python
+serialPort = serial.Serial('/dev/ttyUSB0',
+                            baudrate=115200,
+                            parity=serial.PARITY_NONE,
+                            stopbits=serial.STOPBITS_ONE)
+```
+The file ```readcompass.py``` reads from the USB serial and sends the orientation as MQTT messages on the *orientation* topic. With a MQTT subscriber it's very easy to retrieve the values and we actually used MOSQUITTO on Linux to monitor the values. MOSQUITTO is installed this way:
+
+```
+sudo apt-get update
+sudo apt-get install mosquitto
+sudo apt-get install mosquitto-clients
+```
+
+Then to read the orientation messages:
+
+```
+mosquitto_sub -h donkey-260 -t orientation
+```
+
+Once we could reliably read the orientation, the next step was to handle those angles and generate high level commands.
+
 # High Level Command (HLC)
 
 Our objective was to use the high-level command to gather information about whether the car should turn RIGHT, LEFT, or continue CENTER. For instance, when approaching an intersection, the car would rely on the HLC to determine whether to turn or continue straight while also avoiding obstacles.
