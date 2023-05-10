@@ -1,5 +1,10 @@
 **Blog**
 ====
+# Project
+This project is based on the *Donkey Car* platform and tackles the subject of **localization** and **autonomous**, **free-range**, driving in the Delta building in Tartu.
+
+Our first intuition is to use RSSI to localize the moving car across the Delta building. As a matter of fact, WiFi routers are scattered around the entire building, and we would like to test how good WiFi localization is, and if we can implement it within the Donkey Car framework. Then, we would have a Donkey Car that is able to drive autonomously by controlling its own steering and speed, while avoiding obstacles, but a higher command would force the car to initiate turns to follow a route from a start position to the end goal. The car is embedded with an IMU sensor which used as a compass would ensure the car's heading towards the right direction.
+
 Here is the full blog of this project where we display our research and experiments.
 
 # The Donkey Car
@@ -204,3 +209,4 @@ sudo poweroff
 Unfortunately, a fresh install on the SD card didn't solve the problem. We tried different SD cards, several Raspberry Pis, we also tried to plug the HDMI port to a monitor to see if we could play with the terminal but there was no signal. This was very problematic since we couldn't do anything with the car and make any progress. 
 
 We simply got a brand new car, the number 260. This one had a really good steering angle and we could make much sharper and more usable turns. After wasting precious hours we could finally go back to work.
+
