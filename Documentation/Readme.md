@@ -101,7 +101,7 @@ https://www.youtube.com/watch?v=ZmvoQWlBWLI
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
 
-Ultimately, in order to achieve the desired results, we had to improve the scanning time of the network as the original method was too inconsistent. Our initial attempts involved scanning only wireless access points with a specific frequency, such as all those operating at 2.4GHz. By implementing this method, we were able to reduce the scanning time from #**insert time**#to #**insert time**#. Despite this improvement, we still faced issues with uncertainty.
+Ultimately, in order to achieve the desired results, we had to improve the scanning time of the network as the original method was too inconsistent. Our initial attempts involved scanning only wireless access points with a specific frequency, such as all those operating at 2.4GHz. By implementing this method, we were able to reduce the scanning time from arround 3.7 sec to 0.07 sec. Despite this improvement, we still faced issues with uncertainty.
 
 # IMU
 
@@ -164,6 +164,8 @@ To set up the model that takes high-level commands as inputs, we typically just 
 ## IMU HLC
 The aim was to create a high-level command based on IMU data and basic logic. For instance, we manually set a target angle of 90 degrees to the right, which generated an HLC of RIGHT until the IMU detected that we had completed the 90-degree turn, at which point it generated a CENTER HLC. To test this, we added a button to the controller that would prioritize either the IMU-generated HLC or the manual HLC from the dpad. Furthermore, we were able to replace the dpad's manual command sending function with a function that sends the target angle to the IMU code, allowing the IMU to generate the appropriate HLC. This simulation was necessary to prepare for the scenario where another code (like localization) would provide target angles to the IMU code.
 
+## Localization and HLC
+The goal is to generate High-Level Commands (HLC) based on the car's position, orientation, and a given goal point. To achieve this, we need to calculate the angle difference between the car and the goal point and use the same process as in the IMU HLC section. However, instead of setting the angle manually, we will derive it from the car's relative position to the goal point. Although this approach is theoretically feasible, the current lack of precision in localization makes it unreliable in practice.
 
 # Training a model
 
