@@ -101,10 +101,8 @@ The schematic below breaks down this process in case this explanation was not cl
 
 Here is a video of us trying to locate the car on the computer, while we drive it manually:
 
-
-<figure class="video_container">
-  <iframe src="https://drive.google.com/file/d/0B6m34D8cFdpMZndKTlBRU0tmczg/preview" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
+[![video1](https://img.youtube.com/vi/https://youtu.be/ZmvoQWlBWLI/0.jpg)](https://www.youtube.com/watch?v=https://www.youtube.com/watch?v=ZmvoQWlBWLI
+)
 
 
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
