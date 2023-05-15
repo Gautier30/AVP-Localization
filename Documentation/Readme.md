@@ -63,7 +63,7 @@ From the app it's important to calibrate the steering but **ALSO** the throttle.
 
 # Driving the car
 
-When the car is calibrated, we can actually start driving. Again, the Donkey Car documentation makes it really straightforward. Here are some commands to start driving the car:
+When the car is calibrated, we can actually start driving. Again, the Donkey Car documentation makes it really straight forward. Here are some commands to start driving the car:
 
 ```
 cd ~/mycar
@@ -89,11 +89,11 @@ This is what the interface of the original code looks like :
 </p>
 
 The image represents the second floor of the Delta building of Tartu university. Our current location is represented by the green point, which has been determined by our code, and the circle surrounding it is proportional to the uncertainty of our location.
-We estimate the inaccuracy to be from 2 to 5 meters from our real position.
+We estimates the inaccuracy to be from 2 to 5 meters from our real position.
 
 This first test is localizing our computer hosting the app. However, we want everything to run on the Donkey Car. So we went ahead and installed the full repository on the Raspberry Pi, but unfortunately, the package *Pyside6* which is responsible for the GUI and map of the Delta building cannot be installed on the single board computer (We thought we'd access the GUI running on the car via SSH with an -X argument). A workaround we came up with is installing an MQTT broker on the Pi, and sending the car's position as MQTT messages which a distant computer can grasp and place on the map. This way, the car can determine its position with respect to the routers, use it to navigate, and on our computer we're able to track the said position on the map. While we were at it, we also installed Node-RED on the Pi to take advantage of the MQTT receiver tool and debugging console.
 
-The schematic below breaks down this process:
+The schematic below breaks down this process in case this explanation was not clear enough:
 
 <p align="center">
 <img src="Pictures/mqttserver.png" width="500">
@@ -102,7 +102,7 @@ The schematic below breaks down this process:
 Here is a video of us trying to locate the car on the computer, while we drive it manually:
 
 <figure class="video_container">
-<iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
+  <iframe src="https://www.youtube.com/watch?v=ZmvoQWlBWLI" frameborder="0" allowfullscreen="true"> </iframe>
 </figure>
 
 
@@ -110,10 +110,6 @@ Here is a video of us trying to locate the car on the computer, while we drive i
 With this method we can retrieve the car's location from the server and display it on the map, but there is a significant delay between the actual position of the car and the position shown on the map.The delay is likely caused by the time required for the code to scan all available routers and calculate the location approximation. This delay, combined with the imprecision, creates significant challenges in maintaining accurate real-time tracking of the car when driving autonomously.
 
 Ultimately, in order to achieve the desired results, we had to improve the scanning time of the network as the original method was too inconsistent. Our initial attempts involved scanning only wireless access points with a specific frequency, such as all those operating at 2.4GHz. By implementing this method, we were able to reduce the scanning time from arround 3.7 sec to 0.07 sec. Despite this improvement, we still faced issues with uncertainty.
-
-Here is a video demo of our sped up localization:
-
-https://youtu.be/D-p2JqKJJ3Y
 
 # IMU
 
@@ -172,10 +168,6 @@ We added the ```--type behavior``` parameter to ensure that we wouldn't encounte
 ## Manual HLC
 To set up the model that takes high-level commands as inputs, we typically just need to set **TRAIN_BEHAVIOR** to **True** in the Donkey Car configuration file ```myconfig.py```. However, this approach did not work for us since the high-level commands were not being included in the model inputs when we attempted to train it. In order to resolve this issue, we needed to modify the code. Specifically, we modified the controller code to include the high-level state when the drive was launched. This allowed us to add the high-level command as an input for the model during training. Additionally, while making these changes, we also modified the controller code to enable us to manually change the high-level command using the dpad on the controller.
 
-Here is a demo video of manual HLC:
-
-https://youtu.be/aO8aMNdHT0k
-
 
 ## IMU HLC
 The aim was to create a high-level command based on IMU data and basic logic. For instance, we manually set a target angle of 90 degrees to the right, which generated an HLC of RIGHT until the IMU detected that we had completed the 90-degree turn, at which point it generated a CENTER HLC. To test this, we added a button to the controller that would prioritize either the IMU-generated HLC or the manual HLC from the dpad. Furthermore, we were able to replace the dpad's manual command sending function with a function that sends the target angle to the IMU code, allowing the IMU to generate the appropriate HLC. This simulation was necessary to prepare for the scenario where another code (like localization) would provide target angles to the IMU code.
@@ -197,10 +189,6 @@ donkey train --tub ./data/<tub name> --model ./models/<model name> --type behavi
 ```<tub name>```  is not necessary is you don't have the data directly in the data folder.
 
 Initially, we aimed to train a linear model to enable autonomous driving of the car along the circuit. We gathered data from multiple laps and attempted to train the model. However, the training process took much longer than anticipated due to several issues, which we will discuss below.
-
-Here is a video demo of our Donkey Car doing laps autonomously:
-
-https://youtu.be/tWAjIFH8FDw
 
 
 To train our model, we attempted to use the computer's GPU by following the instructions in the Donkey Car documentation. After numerous hours of installation, deletion, and reinstallation of different versions, we finally succeeded in getting the GPU to work. However, the training process was still problematic - it took a long time to start and would stop or crash after a few epochs. At first, we thought that it might be due to corrupted data. So, we tried different configurations, such as changing the resolution of the images, but we still couldn't get it to work. We also tried reducing the number of parameters of the model to lessen the GPU's load. Finally, what worked for us was setting IMAGE_H which is in the ```myconfig.py``` file to 128 and training the model on the CPU instead of the GPU. Initially, we had kept the default IMAGE_H value of 120, but a warning message indicated that it would be automatically adjusted to 128 because 120 was not feasible. To ensure that we had control over this variable, we manually defined IMAGE_H as 128.
@@ -225,26 +213,3 @@ Unfortunately, a fresh install on the SD card didn't solve the problem. We tried
 
 We simply got a brand new car, the number 260. This one had a really good steering angle and we could make much sharper and more usable turns. After wasting precious hours we could finally go back to work.
 
-# Next steps
-
-At the stage were we have to submit this blog (10/05/2023) the project is technically not complete. The car is not able to navigate autonomously yet, but we still managed to develop the building blocks of what could be the final solution:
-
-- **Localization:** improving the work of Anton Slavin on WiFi router localization, we have a way to localize more or less precisely the car in a straight line (ideally Delta's 2 floor for now). The refresh rate is okay for a moving vehicle but the accuracy of localization could be improved further (better calculations, filtering routers...).
-
-- **IMU:** we have our "compass" working. The MPU6050 works enough for now although we need to manually set the North everytime. We could improve this part using the MPU9250 that's on the car. The Donkey Car community could help, or the sensor would be rather easy to source and install the way we did with our own IMU.
-
-- **High level commands:** the high level commands work with a very simple model trained on very few data. We could start training a more serious model driving around the entire building. That way we could hopefully generalize on more intersections that the one next to the IoT Lab. The commands are easy to generate both manually and with our compass.
-
-# Conclusion
-
-We showed with this project that it is feasible to localize the Donkey Car more or less precisely to allow free range driving in the entire Delta building without using traditional solutions like LiDars. We also managed to implement high level commands to dictate some action based on a compass, which the car obeys only if the environment allows it.
-
-Unfortunately, we wasted quite a lot of precious time on hardware debugging. Thus, we do not have a working autonomous car at the end date of this project. It is quite frustrating but we still managed to come up with all the "parts" we would need to push this work forward and eventually complete it.
-
-About the learning outcomes of this project, it was a great opportunity for us to dive deep into some complex code architecture and inject our bits here and there, with sometimes some very limited documentation from the Donkey Car community. We also learned that even if the scope of this project was mostly software based, when the hardware doesn't want to cooperate, the entire project is stalled.
-
-# Acknowledgement
-
-We would like to thank Anton Slavin for his work on WiFi localization and his tips on how to make his app work on our machine.
-
-We would also like to thank Naveed Muhammad and Ardi Tampuu for their trust and guidance trhoughout this whole project.
