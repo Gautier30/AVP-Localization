@@ -63,7 +63,7 @@ From the app it's important to calibrate the steering but **ALSO** the throttle.
 
 # Driving the car
 
-When the car is calibrated, we can actually start driving. Again, the Donkey Car documentation makes it really straight forward. Here are some commands to start driving the car:
+When the car is calibrated, we can actually start driving. Again, the Donkey Car documentation makes it really straightforward. Here are some commands to start driving the car:
 
 ```
 cd ~/mycar
