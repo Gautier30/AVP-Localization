@@ -74,6 +74,8 @@ Note that the ``` --js ``` argument specifies that we want to drive with the con
 
 Pressing the **START** button until the terminal says "user" we set the car so that it expects thumbsticks input for throttle and steering. The car should move if the speed multiplier is set high enough with the D-pad's up and down buttons!
 
+The car will then automatically records data when driving.
+
 # Indoor localization 
 
 Indoor localization poses a significant challenge as conventional tools such as GPS are not reliable in buildings. As a result, our project turned to WIFI localization as a potential solution. We discovered a project developed by a bachelor's student from Tartu University that utilized WIFI signals for positioning. You can find the code on his GitHub repository: https://github.com/tonysln/delta-wifi-pos.
@@ -160,6 +162,7 @@ mosquitto_sub -h donkey-260 -t orientation
 Once we could reliably read the orientation, the next step was to handle those angles and generate high level commands.
 
 # High Level Command (HLC)
+High-level commands (HLCs) serve as an additional vector input for models, along with images and other inputs such as steering, to guide the model's actions.
 
 Our objective was to use the high-level command to gather information about whether the car should turn RIGHT, LEFT, or continue CENTER. For instance, when approaching an intersection, the car would rely on the HLC to determine whether to turn or continue straight while also avoiding obstacles.
 
@@ -186,6 +189,8 @@ The aim was to create a high-level command based on IMU data and basic logic. Fo
 The goal is to generate High-Level Commands (HLC) based on the car's position, orientation, and a given goal point. To achieve this, we need to calculate the angle difference between the car and the goal point and use the same process as in the IMU HLC section. However, instead of setting the angle manually, we will derive it from the car's relative position to the goal point. Although this approach is theoretically feasible, the current lack of precision in localization makes it unreliable in practice.
 
 # Training a model
+
+First , we need to get data by driving the car as we describe in the above dedicated section.
 
 To train the model we need to run the following command:
 ```
